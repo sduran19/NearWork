@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: operation-service
+  cloud:
+    config:
+      uri: http://localhost:9000
+      username: admin
+      password: admin
+      enabled: true
+      profile: dev
