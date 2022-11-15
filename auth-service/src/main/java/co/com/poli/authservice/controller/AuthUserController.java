@@ -3,31 +3,49 @@ package co.com.poli.authservice.controller;
 
 import co.com.poli.authservice.dto.*;
 import co.com.poli.authservice.entity.AuthUser;
+import co.com.poli.authservice.entity.Image;
 import co.com.poli.authservice.helpers.ErrorMessage;
 import co.com.poli.authservice.helpers.Response;
 import co.com.poli.authservice.helpers.ResponseBuild;
+import co.com.poli.authservice.repository.ImageRepository;
 import co.com.poli.authservice.service.AuthUserService;
+import co.com.poli.authservice.utils.FileDownloadUtil;
+import co.com.poli.authservice.utils.FileUploadUtil;
+import co.com.poli.authservice.utils.ImageUtility;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLConnection;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthUserController {
 
+    private static final String EXTERNAL_FILE_PATH = "user-photos/1/";
     @Autowired
     AuthUserService authUserService;
 
     @Autowired
     ResponseBuild responseBuild;
+
+    @Autowired
+    ImageRepository imageRepository;
 
    /* @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@RequestBody AuthUserDto dto){
@@ -82,6 +100,14 @@ public class AuthUserController {
         return responseBuild.created(authUser);
     }
 
+    @GetMapping("/view/profile/{email}")
+    public Response viewProfileUser(@PathVariable("email") String email){
+        UserInfoDto authUser = authUserService.getInfoUser(email);
+        if(authUser == null)
+            return responseBuild.failed("NO EXISTE");
+        return responseBuild.success(authUser);
+    }
+
     /*@PostMapping("/reset")
     public ResponseEntity<AuthUser> resetPassword(@RequestBody ResetPassWordUserDto dto){
         AuthUser authUser = authUserService.resetPassword(dto);
@@ -104,6 +130,82 @@ public class AuthUserController {
         if(authUser == null)
             return responseBuild.failed("Error al validar los datos. Intente de nuevo");
         return responseBuild.success(authUser);
+    }
+
+    @PostMapping("/profile/cv/{email}")
+    public void uploadProfileImage(@PathVariable("email") String email,@RequestParam("file")MultipartFile multipartFile) throws IOException {
+        AuthUser authUser = authUserService.getAuthUser(email);
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+        System.out.println("Archivo: " + fileName);
+        String uploadDir = "user-files/" + authUser.getId();
+        FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+    }
+
+
+    //cambiar para el fileCode sea el codigo del pdf
+
+    @GetMapping("/downloadFile/{fileCode}")
+    public ResponseEntity<?> downloadFile(@PathVariable("fileCode") String fileCode) {
+        FileDownloadUtil downloadUtil = new FileDownloadUtil();
+
+        Resource resource = null;
+        try {
+            resource = downloadUtil.getFileAsResource(fileCode);
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+
+        if (resource == null) {
+            return new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);
+        }
+
+        String contentType = "application/octet-stream";
+        String headerValue = "attachment; filename=\"" + resource.getFilename() + "\"";
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
+                .body(resource);
+    }
+
+
+
+
+
+
+
+
+
+
+
+    @PostMapping("/upload/image/{email}")
+    public Response uplaodImage(@PathVariable("email") String email,@RequestParam("image") MultipartFile file) throws IOException {
+        AuthUser authUser = authUserService.getAuthUser(email);
+        if (imageRepository.findByIdUser(authUser.getId()).isPresent()){
+            Image image = imageRepository.findByIdUser(authUser.getId()).get();
+            image.setType(file.getContentType());
+            image.setName(file.getOriginalFilename());
+            image.setImage(ImageUtility.compressImage(file.getBytes()));
+            imageRepository.save(image);
+        }else {
+            imageRepository.save(Image.builder()
+                    .name(file.getOriginalFilename())
+                    .type(file.getContentType())
+                    .idUser(authUser.getId())
+                    .image(ImageUtility.compressImage(file.getBytes())).build());
+        }
+
+        return responseBuild.success("Image uploaded successfully: " + file.getOriginalFilename());
+    }
+
+    @GetMapping("/profile/get/image/{email}")
+    public ResponseEntity<byte[]> getProfileImage(@PathVariable("email") String email) {
+        AuthUser authUser = authUserService.getAuthUser(email);
+        final Optional<Image> dbImage = imageRepository.findByIdUser(authUser.getId());
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.valueOf(dbImage.get().getType()))
+                .body(ImageUtility.decompressImage(dbImage.get().getImage()));
     }
 
 

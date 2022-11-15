@@ -79,4 +79,21 @@ public class AuthUserService {
         user.get().setLocked(false);
         return authUserRepository.save(user.get());
     }
+
+    public AuthUser getAuthUser(String email) {
+        return authUserRepository.findByEmail(email).get();
+    }
+
+    public UserInfoDto getInfoUser(String email) {
+        AuthUser user = authUserRepository.findByEmail(email).get();
+        return UserInfoDto.builder()
+                .name(user.getName())
+                .lastName(user.getLastName())
+                .documentType(user.getDocumentType())
+                .documentNumber(user.getDocumentNumber())
+                .cellPhone(user.getCellPhone())
+                .address(user.getAddress())
+                .email(user.getEmail())
+                .build();
+    }
 }
