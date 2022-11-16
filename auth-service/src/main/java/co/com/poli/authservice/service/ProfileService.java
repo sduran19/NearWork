@@ -22,7 +22,7 @@ public class ProfileService {
 
     public Profile save(ProfileDto dto) {
         Optional<AuthUser> user = authUserRepository.findByEmail(dto.getEmailUser());
-        if(user.isPresent())
+        if(user.isEmpty())
             return null;
         Profile profile = Profile.builder()
                 .idUser(user.get().getId())
@@ -38,14 +38,14 @@ public class ProfileService {
 
     public List<Profile> getListProfile(String email) {
         Optional<AuthUser> user = authUserRepository.findByEmail(email);
-        if(user.isPresent())
+        if(user.isEmpty())
             return null;
         return profileRepository.findAllByIdUser(user.get().getId());
     }
 
     public Profile getProfile(int idProfile) {
         Optional<Profile> profile = profileRepository.findById(idProfile);
-        if(profile.isPresent())
+        if(profile.isEmpty())
             return null;
         return profile.get();
     }

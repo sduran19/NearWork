@@ -10,3 +10,4 @@ spring:
       profile: dev
 jwt:
   secret: secret
+

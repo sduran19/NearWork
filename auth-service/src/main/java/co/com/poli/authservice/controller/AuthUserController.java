@@ -132,52 +132,6 @@ public class AuthUserController {
         return responseBuild.success(authUser);
     }
 
-    @PostMapping("/profile/cv/{email}")
-    public void uploadProfileImage(@PathVariable("email") String email,@RequestParam("file")MultipartFile multipartFile) throws IOException {
-        AuthUser authUser = authUserService.getAuthUser(email);
-        String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
-        System.out.println("Archivo: " + fileName);
-        String uploadDir = "user-files/" + authUser.getId();
-        FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
-    }
-
-
-    //cambiar para el fileCode sea el codigo del pdf
-
-    @GetMapping("/downloadFile/{fileCode}")
-    public ResponseEntity<?> downloadFile(@PathVariable("fileCode") String fileCode) {
-        FileDownloadUtil downloadUtil = new FileDownloadUtil();
-
-        Resource resource = null;
-        try {
-            resource = downloadUtil.getFileAsResource(fileCode);
-        } catch (IOException e) {
-            return ResponseEntity.internalServerError().build();
-        }
-
-        if (resource == null) {
-            return new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);
-        }
-
-        String contentType = "application/octet-stream";
-        String headerValue = "attachment; filename=\"" + resource.getFilename() + "\"";
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
-                .body(resource);
-    }
-
-
-
-
-
-
-
-
-
-
-
     @PostMapping("/upload/image/{email}")
     public Response uplaodImage(@PathVariable("email") String email,@RequestParam("image") MultipartFile file) throws IOException {
         AuthUser authUser = authUserService.getAuthUser(email);

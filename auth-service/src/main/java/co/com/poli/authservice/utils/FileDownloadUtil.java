@@ -11,10 +11,9 @@ import org.springframework.core.io.UrlResource;
 public class FileDownloadUtil {
     private Path foundFile;
     public Resource getFileAsResource(String fileCode) throws IOException {
-        Path dirPath = Paths.get("user-photos/1");
+        Path dirPath = Paths.get("user-files");
 
         Files.list(dirPath).forEach(file -> {
-            System.out.println(file.getFileName());
             if (file.getFileName().toString().startsWith(fileCode)) {
                 foundFile = file;
                 return;
