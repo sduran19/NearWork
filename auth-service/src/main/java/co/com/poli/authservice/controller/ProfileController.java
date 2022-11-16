@@ -46,6 +46,8 @@ public class ProfileController {
         return responseBuild.success(listProfile);
     }
 
+    //comentario
+
     @GetMapping("/profile/{id}")
     public Response findAllList(@PathVariable("id") String email, BindingResult result){
         List<Profile> listProfile = profileService.getListProfile(email);
