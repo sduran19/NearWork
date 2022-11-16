@@ -84,6 +84,7 @@ public class AuthUserService {
         return authUserRepository.findByEmail(email).get();
     }
 
+
     public UserInfoDto getInfoUser(String email) {
         AuthUser user = authUserRepository.findByEmail(email).get();
         return UserInfoDto.builder()
