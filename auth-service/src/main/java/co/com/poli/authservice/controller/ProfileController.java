@@ -38,6 +38,22 @@ public class ProfileController {
         return responseBuild.created(profile);
     }
 
+    @GetMapping("/profile/list/{email}")
+    public Response findAllListProfile(@PathVariable("email") String email, BindingResult result){
+        List<Profile> listProfile = profileService.getListProfile(email);
+        if(listProfile == null)
+            return responseBuild.failed(formatMessage(result));
+        return responseBuild.success(listProfile);
+    }
+
+    @GetMapping("/profile/{id}")
+    public Response findAllList(@PathVariable("id") String email, BindingResult result){
+        List<Profile> listProfile = profileService.getListProfile(email);
+        if(listProfile == null)
+            return responseBuild.failed(formatMessage(result));
+        return responseBuild.success(listProfile);
+    }
+
     //terminar las demas capas el perfil debe guardar el id de la persona por medio del correo
     //Pasar el guardado del documento a esta entidad y relacionarlo al campo
 
