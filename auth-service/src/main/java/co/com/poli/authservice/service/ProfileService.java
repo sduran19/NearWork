@@ -36,6 +36,10 @@ public class ProfileService {
         return profileRepository.save(profile);
     }
 
+    public Profile update(Profile profile) {
+        return profileRepository.save(profile);
+    }
+
     public List<Profile> getListProfile(String email) {
         Optional<AuthUser> user = authUserRepository.findByEmail(email);
         if(user.isEmpty())

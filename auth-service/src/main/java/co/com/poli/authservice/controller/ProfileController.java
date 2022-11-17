@@ -32,7 +32,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/perfil")
+@RequestMapping("/profile")
 public class ProfileController {
 
     @Autowired
@@ -49,7 +49,7 @@ public class ProfileController {
         return responseBuild.created(profile);
     }
 
-    @GetMapping("/profile/list/{email}")
+    @GetMapping("/list/{email}")
     public Response findAllListProfile(@PathVariable("email") String email){
         System.out.println("EMAIL: " + email);
         List<Profile> listProfile = profileService.getListProfile(email);
@@ -58,7 +58,7 @@ public class ProfileController {
         return responseBuild.success(listProfile);
     }
 
-    @GetMapping("/profile/{id}")
+    @GetMapping("/{id}")
     public Response findProfile(@PathVariable("id") int id){
         Profile profile = profileService.getProfile(id);
         if(profile == null)
@@ -66,16 +66,18 @@ public class ProfileController {
         return responseBuild.success(profile);
     }
 
-    @PostMapping("/profile/cv/upload/{idProfile}")
-    public void uploadProfileImage(@PathVariable("idProfile") int id,@RequestParam("file") MultipartFile multipartFile) throws IOException {
+    @PostMapping("/cv/upload/{idProfile}")
+    public Response uploadProfileImage(@PathVariable("idProfile") int id,@RequestParam("file") MultipartFile multipartFile) throws IOException {
         Profile profile = profileService.getProfile(id);
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
         //String uploadDir = "user-files/" + profile.getId();
         String uploadDir = "user-files";
-        FileUploadUtil.saveFile(uploadDir, fileName,String.valueOf(profile.getId()), multipartFile);
+        String nameFile = FileUploadUtil.saveFile(uploadDir, fileName,String.valueOf(profile.getId()), multipartFile);
+        profile.setCodeBriefcase(nameFile);
+        return responseBuild.success(profileService.update(profile));
     }
 
-    @GetMapping("/profile/cv/downloadFile/{idProfile}")
+    @GetMapping("/cv/downloadFile/{idProfile}")
     public ResponseEntity<?> downloadFile(@PathVariable("idProfile") String fileCode) {
         FileDownloadUtil downloadUtil = new FileDownloadUtil();
 

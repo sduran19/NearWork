@@ -72,7 +72,9 @@ public class AuthUserService {
 
     public AuthUser changePassword(ChangePasswordUserDto dto) {
         Optional<AuthUser> user = authUserRepository.findByEmail(dto.getEmail());
-        if(!user.isPresent() || !dto.getOldPassword().equals(user.get().getDocumentNumber()))
+        //if(!user.isPresent() || !dto.getOldPassword().equals(user.get().getDocumentNumber()))
+           // return null;
+        if(!user.isPresent() || !passwordEncoder.matches(dto.getOldPassword(), user.get().getPassword()))
             return null;
         String password = passwordEncoder.encode(dto.getNewPassword());
         user.get().setPassword(password);
