@@ -1,7 +1,9 @@
 package co.com.poli.authservice.controller;
 
+import co.com.poli.authservice.dto.ListSearchDto;
 import co.com.poli.authservice.dto.NewUserDto;
 import co.com.poli.authservice.dto.ProfileDto;
+import co.com.poli.authservice.dto.SearchServiceDto;
 import co.com.poli.authservice.entity.AuthUser;
 import co.com.poli.authservice.entity.Profile;
 import co.com.poli.authservice.helpers.ErrorMessage;
@@ -24,6 +26,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +45,7 @@ public class ProfileController {
     ResponseBuild responseBuild;
 
     @PostMapping("/create")
-    public Response create(@RequestBody ProfileDto dto, BindingResult result){
+    public Response create(@Valid @RequestBody ProfileDto dto, BindingResult result){
         Profile profile = profileService.save(dto);
         if(profile == null)
             return responseBuild.failed(formatMessage(result));
@@ -101,11 +104,13 @@ public class ProfileController {
                 .body(resource);
     }
 
-    //terminar las demas capas el perfil debe guardar el id de la persona por medio del correo --Listo
-    //Pasar el guardado del documento a esta entidad y relacionarlo al campo --Listo
-
-    //Crear otra entidad de la solicitud del usuario con el perfil creado
-    //A esa entidad relacionarle el perfil
+    @PostMapping("/search")
+    public Response search(@RequestBody SearchServiceDto dto, BindingResult result){
+        List<ListSearchDto> searchDtos = profileService.listSearchServices(dto);
+        if(searchDtos == null)
+            return responseBuild.failed(formatMessage(result));
+        return responseBuild.success(searchDtos);
+    }
 
     private String formatMessage(BindingResult result) {
         List<Map<String, String>> errors = result.getFieldErrors().stream()

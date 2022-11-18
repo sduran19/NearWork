@@ -1,0 +1,582 @@
+{
+	"info": {
+		"_postman_id": "181cf183-81c7-4569-87e5-6fbd1a59f5b2",
+		"name": "NearWork",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Crear cuenta",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"test@yopmail.com\",\r\n  \"password\": \"123456\",\r\n  \"name\": \"Junito\",\r\n  \"lastName\": \"Becerra\",\r\n  \"documentType\": \"CEDULA\",\r\n  \"documentNumber\": \"102030\",\r\n  \"cellPhone\": 2770010,\r\n  \"address\": \"Calle falsa 123\",\r\n  \"role\": \"usuario\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/create",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"test@yopmail.com\",\r\n  \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reset contraseña",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"test@yopmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/resetPassword",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"resetPassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cambiar contraseña",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"test@yopmail.com\",\r\n  \"oldPassword\": \"102030\",\r\n  \"newPassword\": \"302010\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/changePassword",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"changePassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ver cuenta usuario",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/auth/view/profile/test@yopmail.com",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"view",
+						"profile",
+						"test@yopmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload foto perfil",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/D:/Informacion/Imágenes/logo.png"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/upload/image/test@yopmail.com",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"upload",
+						"image",
+						"test@yopmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ver foto de perfil",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/profile/get/image/test@yopmail.com",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"profile",
+						"get",
+						"image",
+						"test@yopmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Trabajador - Crear sus servicios",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"emailUser\": \"test@yopmail.com\",\r\n  \"typeService\": \"INFORMATICO\",\r\n  \"commune\": \"EL POBLADO\",\r\n  \"profession\": \"COMERCIANTE\",\r\n  \"yearsExperience\": 5,\r\n  \"linkFacebook\": \"www.facebook.com/COMERCIO\",\r\n  \"linkInstragram\": \"www.Instagram.com/COMERCIO\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/profile/create",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"profile",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Trabajador - Obtener servicio",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/profile/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"profile",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Trabajador - Obtener lista de servicios",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/profile/list/test@yopmail.com",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"profile",
+						"list",
+						"test@yopmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Trabajador - Subir archivo de portafolio",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/sebas/Desktop/Nueva carpeta/Download/6.POLITICAS-DE-COBRANZAS.pdf"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/profile/cv/upload/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"profile",
+						"cv",
+						"upload",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Descargar portafolio del trabajador",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/profile/cv/downloadFile/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"profile",
+						"cv",
+						"downloadFile",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear solicitud",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"emailClient\": \"cliente@yopmail.com\",\r\n  \"comment\": \"Este es el comentario de la solicitud\",\r\n  \"idProfile\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/request/create",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"request",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar estado solicitud",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"state\": 3,\r\n  \"idRequest\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/request/updateState",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"request",
+						"updateState"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Trabajador - Obtener lista de solicitudes obtenidas",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"state\": 3,\r\n  \"idRequest\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/request/list/serviceWorker/test@yopmail.com",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"request",
+						"list",
+						"serviceWorker",
+						"test@yopmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cliente- Obtener listado de sus solicitudes",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"state\": 3,\r\n  \"idRequest\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/request/list/myservices/cliente@yopmail.com",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"request",
+						"list",
+						"myservices",
+						"cliente@yopmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Lista tipo documentos",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"state\": 3,\r\n  \"idRequest\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/list/documentsType",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"list",
+						"documentsType"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Lista tipos de servicio",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"state\": 3,\r\n  \"idRequest\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/list/typeServices",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"list",
+						"typeServices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Lista comunas",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"state\": 3,\r\n  \"idRequest\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/list/communeList",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"list",
+						"communeList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buscador",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"commune\": \"EL POBLADO\",\r\n  \"typeService\": \"INFORMATICO\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/profile/search",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"profile",
+						"search"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

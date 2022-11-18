@@ -27,7 +27,7 @@ public class RequestService {
     RequestRepository requestRepository;
 
     public Request save(RequestServiceDto dto) {
-        Optional<AuthUser> user = authUserRepository.findByEmail(dto.getEmail());
+        Optional<AuthUser> user = authUserRepository.findByEmail(dto.getEmailClient());
         Optional<Profile> profile = profileRepository.findById(dto.getIdProfile());
         if(user.isEmpty() || profile.isEmpty())
             return null;
@@ -90,10 +90,5 @@ public class RequestService {
         }
         return myServicesList;
     }
-
-
-
-
-
 
 }

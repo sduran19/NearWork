@@ -1,6 +1,9 @@
 package co.com.poli.authservice.controller;
 
 
+import co.com.poli.authservice.constants.CommuneList;
+import co.com.poli.authservice.constants.DocumentTypes;
+import co.com.poli.authservice.constants.TypeServicesEnum;
 import co.com.poli.authservice.dto.*;
 import co.com.poli.authservice.entity.AuthUser;
 import co.com.poli.authservice.entity.Image;
@@ -9,27 +12,18 @@ import co.com.poli.authservice.helpers.Response;
 import co.com.poli.authservice.helpers.ResponseBuild;
 import co.com.poli.authservice.repository.ImageRepository;
 import co.com.poli.authservice.service.AuthUserService;
-import co.com.poli.authservice.utils.FileDownloadUtil;
-import co.com.poli.authservice.utils.FileUploadUtil;
 import co.com.poli.authservice.utils.ImageUtility;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.FileCopyUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.net.URLConnection;
+import javax.validation.Valid;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -56,7 +50,7 @@ public class AuthUserController {
     }*/
 
     @PostMapping("/login")
-    public Response login(@RequestBody AuthUserDto dto, BindingResult result){
+    public Response login(@Valid @RequestBody AuthUserDto dto, BindingResult result){
         TokenDto tokenDto = authUserService.login(dto);
         if(result.hasErrors()){
             return responseBuild.failed(formatMessage(result));
@@ -93,7 +87,7 @@ public class AuthUserController {
     }*/
 
     @PostMapping("/create")
-    public Response create(@RequestBody NewUserDto dto, BindingResult result){
+    public Response create(@Valid @RequestBody NewUserDto dto, BindingResult result){
         AuthUser authUser = authUserService.save(dto);
         if(authUser == null)
             return responseBuild.failed(formatMessage(result));
@@ -117,7 +111,7 @@ public class AuthUserController {
     }*/
 
     @PostMapping("/resetPassword")
-    public Response resetPassword(@RequestBody ResetPassWordUserDto dto, BindingResult result){
+    public Response resetPassword(@Valid @RequestBody ResetPassWordUserDto dto, BindingResult result){
         AuthUser authUser = authUserService.resetPassword(dto);
         if(authUser == null)
             return responseBuild.failed(formatMessage(result));
@@ -125,7 +119,7 @@ public class AuthUserController {
     }
 
     @PostMapping("/changePassword")
-    public Response changePassword(@RequestBody ChangePasswordUserDto dto){
+    public Response changePassword(@Valid @RequestBody ChangePasswordUserDto dto){
         AuthUser authUser = authUserService.changePassword(dto);
         if(authUser == null)
             return responseBuild.failed("Error al validar los datos. Intente de nuevo");
@@ -160,6 +154,23 @@ public class AuthUserController {
                 .ok()
                 .contentType(MediaType.valueOf(dbImage.get().getType()))
                 .body(ImageUtility.decompressImage(dbImage.get().getImage()));
+    }
+
+    @GetMapping("/list/documentsType")
+    public Response documentsTypeList(){
+        return responseBuild.success(DocumentTypes.values());
+    }
+
+    @GetMapping("/list/communeList")
+    public Response communeList(){
+        List<String> communes = Arrays.stream(CommuneList.values()).map(CommuneList::getNamesCommune).collect(Collectors.toList());
+        return responseBuild.success(communes);
+    }
+
+    @GetMapping("/list/typeServices")
+    public Response typeServices(){
+        List<String> services = Arrays.stream(TypeServicesEnum.values()).map(TypeServicesEnum::getNamesServices).collect(Collectors.toList());
+        return responseBuild.success(services);
     }
 
 
